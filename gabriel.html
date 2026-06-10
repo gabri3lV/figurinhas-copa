@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gabriel – Faltantes · Copa 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0f1e;
+      --surface: #111827;
+      --surface2: #1a2236;
+      --border: rgba(255,255,255,0.08);
+      --text: #f0f4ff;
+      --muted: #7a8aaa;
+      --accent: #378ADD;
+      --accent-soft: rgba(55,138,221,0.12);
+      --accent-border: rgba(55,138,221,0.28);
+      --gold: #EF9F27;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 0 0 4rem;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 40% at 50% 0%, rgba(55,138,221,0.07) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    header {
+      position: relative;
+      z-index: 1;
+      padding: 1.5rem 1.5rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .back {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.15s;
+      flex-shrink: 0;
+    }
+    .back:hover { color: var(--text); }
+    .back svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+    .header-inner { display: flex; align-items: center; gap: 12px; flex: 1; }
+
+    .avatar {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--accent-soft);
+      border: 1.5px solid var(--accent-border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 17px; font-weight: 600; color: #7ec4f5; flex-shrink: 0;
+    }
+
+    .header-text h1 { font-size: 18px; font-weight: 600; letter-spacing: -0.01em; }
+    .header-text p { font-size: 12px; color: var(--muted); margin-top: 1px; }
+
+    .summary-badges { display: flex; gap: 8px; margin-left: auto; }
+
+    .badge {
+      font-size: 12px; font-weight: 500; border-radius: 20px; padding: 4px 12px; white-space: nowrap;
+    }
+    .badge-blue {
+      background: var(--accent-soft);
+      border: 1px solid var(--accent-border);
+      color: #7ec4f5;
+    }
+
+    .search-wrap {
+      position: relative; z-index: 1;
+      max-width: 900px; margin: 1.25rem auto 0; padding: 0 1.5rem;
+    }
+    .search-wrap input {
+      width: 100%; background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; color: var(--text); font-family: 'Inter', sans-serif;
+      font-size: 14px; padding: 0.65rem 1rem 0.65rem 2.5rem; outline: none;
+      transition: border-color 0.15s;
+    }
+    .search-wrap input::placeholder { color: var(--muted); }
+    .search-wrap input:focus { border-color: var(--accent-border); }
+    .search-icon {
+      position: absolute; left: calc(1.5rem + 10px); top: 50%;
+      transform: translateY(-50%); width: 16px; height: 16px; pointer-events: none; opacity: 0.4;
+    }
+
+    .grid {
+      position: relative; z-index: 1;
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 12px; max-width: 900px; margin: 1.25rem auto 0; padding: 0 1.5rem;
+    }
+
+    .nation-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 14px; padding: 1rem 1.1rem; transition: border-color 0.15s;
+    }
+    .nation-card:hover { border-color: var(--accent-border); }
+
+    .nation-header {
+      display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem;
+    }
+    .nation-name { font-size: 13px; font-weight: 600; letter-spacing: 0.04em; display: flex; align-items: center; gap: 8px; }
+    .flag { font-size: 20px; line-height: 1; }
+    .nation-count {
+      font-size: 11px; background: var(--accent-soft); color: #7ec4f5;
+      border: 1px solid var(--accent-border); border-radius: 20px; padding: 2px 9px; font-weight: 500;
+    }
+
+    .stickers { display: flex; flex-wrap: wrap; gap: 5px; }
+    .sticker {
+      width: 28px; height: 28px; border-radius: 6px;
+      background: var(--accent-soft); border: 1px solid var(--accent-border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 600; color: #7ec4f5;
+    }
+
+    .empty {
+      grid-column: 1 / -1; text-align: center; padding: 3rem 1rem;
+      color: var(--muted); font-size: 14px;
+    }
+
+    @media (max-width: 500px) {
+      .summary-badges { display: none; }
+      .grid { grid-template-columns: 1fr 1fr; gap: 8px; padding: 0 1rem; }
+      .search-wrap { padding: 0 1rem; }
+      header { padding: 1.25rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="index.html" class="back">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      Voltar
+    </a>
+    <div class="header-inner">
+      <div class="avatar">G</div>
+      <div class="header-text">
+        <h1>Gabriel</h1>
+        <p>Figurinhas faltantes</p>
+      </div>
+      <div class="summary-badges">
+        <span class="badge badge-blue" id="total-badge">… faltantes</span>
+        <span class="badge badge-blue" id="found-badge">… encontradas</span>
+        <span class="badge badge-gold" id="nations-badge">… seleções</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="search-wrap">
+    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="#7a8aaa" stroke-width="2">
+      <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+    </svg>
+    <input type="text" id="search" placeholder="Buscar seleção..." oninput="filterCards()" />
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  <script>
+    const FLAGS = {
+      MEX:'🇲🇽', RSA:'🇿🇦', KOR:'🇰🇷', CZE:'🇨🇿', CAN:'🇨🇦', BIH:'🇧🇦',
+      QAT:'🇶🇦', SUI:'🇨🇭', BRA:'🇧🇷', MAR:'🇲🇦', HAI:'🇭🇹', SCO:'🏴󠁧󠁢󠁳󠁣󠁴󠁿',
+      USA:'🇺🇸', PAR:'🇵🇾', AUS:'🇦🇺', TUR:'🇹🇷', GER:'🇩🇪', CUW:'🇨🇼',
+      CIV:'🇨🇮', ECU:'🇪🇨', NED:'🇳🇱', JPN:'🇯🇵', SWE:'🇸🇪', TUN:'🇹🇳',
+      BEL:'🇧🇪', EGY:'🇪🇬', IRN:'🇮🇷', NZL:'🇳🇿', ESP:'🇪🇸', CPV:'🇨🇻',
+      KSA:'🇸🇦', URU:'🇺🇾', FRA:'🇫🇷', SEN:'🇸🇳', IRQ:'🇮🇶', NOR:'🇳🇴',
+      ARG:'🇦🇷', ALG:'🇩🇿', AUT:'🇦🇹', JOR:'🇯🇴', POR:'🇵🇹', COD:'🇨🇩',
+      UZB:'🇺🇿', COL:'🇨🇴', ENG:'🏴󠁧󠁢󠁥󠁮󠁧󠁿', CRO:'🇭🇷', GHA:'🇬🇭', PAN:'🇵🇦'
+    };
+
+    const NAMES = {
+      MEX:'México', RSA:'África do Sul', KOR:'Coreia do Sul', CZE:'República Tcheca',
+      CAN:'Canadá', BIH:'Bósnia e Herzegovina', QAT:'Catar', SUI:'Suíça',
+      BRA:'Brasil', MAR:'Marrocos', HAI:'Haiti', SCO:'Escócia', USA:'Estados Unidos',
+      PAR:'Paraguai', AUS:'Austrália', TUR:'Turquia', GER:'Alemanha',
+      CUW:'Curaçao', CIV:'Costa do Marfim', ECU:'Equador', NED:'Países Baixos',
+      JPN:'Japão', SWE:'Suécia', TUN:'Tunísia', BEL:'Bélgica', EGY:'Egito',
+      IRN:'Irã', NZL:'Nova Zelândia', ESP:'Espanha', CPV:'Cabo Verde',
+      KSA:'Arábia Saudita', URU:'Uruguai', FRA:'França', SEN:'Senegal',
+      IRQ:'Iraque', NOR:'Noruega', ARG:'Argentina', ALG:'Argélia', AUT:'Áustria',
+      JOR:'Jordânia', POR:'Portugal', COD:'RD Congo', UZB:'Uzbequistão',
+      COL:'Colômbia', ENG:'Inglaterra', CRO:'Croácia', GHA:'Gana', PAN:'Panamá'
+    };
+
+    // ── COLE A LISTA DO GABRIEL AQUI ──
+    const DATA = [
+      { code:'FWC', missing:[3,5,7,10,12,17,18,19] },
+      { code:'MEX', missing:[5,6,9,12,13,14,15,16,17] },
+      { code:'RSA', missing:[1,5,8,10,11,12,18] },
+      { code:'KOR', missing:[1,3,5,8,10,11,12,13,14,15,17,19,20] },
+      { code:'CZE', missing:[1,3,7,8,10,11,13,14,16,19,20] },
+      { code:'CAN', missing:[2,4,5,12,13,15,16,17,19,20] },
+      { code:'BIH', missing:[2,3,5,6,7,8,9,12,16,17,18,19] },
+      { code:'QAT', missing:[1,3,8,9,11,13] },
+      { code:'SUI', missing:[1,2,4,5,9,11,13,14,16,18,19] },
+      { code:'BRA', missing:[1,3,9,12,13,16,17,20] },
+      { code:'MAR', missing:[1,3,4,5,8,9,11,12,13,15,16,17,19] },
+      { code:'HAI', missing:[2,4,6,13,16,17,19] },
+      { code:'SCO', missing:[1,2,3,4,6,7,11,12,14,17] },
+      { code:'USA', missing:[2,3,4,8,9,10,12,13,16,18] },
+      { code:'PAR', missing:[3,7,8,10,11,15,17,18] },
+      { code:'AUS', missing:[1,4,10,14,15,16,19] },
+      { code:'TUR', missing:[2,4,5,6,7,9,12,13,18,19] },
+      { code:'GER', missing:[2,4,5,7,8,9,10,11,12,13,14,15,16,19,20] },
+      { code:'CUW', missing:[2,4,6,7,8,9,11,14,15,16,17,18,19,20] },
+      { code:'CIV', missing:[2,3,4,5,8,11,12,13,16,18,20] },
+      { code:'ECU', missing:[1,2,3,4,9,10,13,14,15,17,18,19] },
+      { code:'NED', missing:[2,5,6,7,10,13,14,15,16] },
+      { code:'JPN', missing:[2,3,4,6,7,8,9,10,11,13,16,17,18,19,20] },
+      { code:'SWE', missing:[1,3,8,9,11,12,13,14,15,16,17,18,20] },
+      { code:'TUN', missing:[1,13,14] },
+      { code:'BEL', missing:[2,4,5,6,7,8,9,10,12,13,16,18,19] },
+      { code:'EGY', missing:[1,3,7,12,13,14,15,18,19] },
+      { code:'IRN', missing:[2,4,5,8,9,10,11,12,13,14,15,17,19] },
+      { code:'NZL', missing:[1,2,3,4,6,7,8,9,11,12,13,14,15,16,17,18,19] },
+      { code:'ESP', missing:[1,2,3,4,6,7,12,13,14,15,16,17] },
+      { code:'CPV', missing:[3,4,5,6,7,8,9,10,11,12,15,16,20] },
+      { code:'KSA', missing:[3,5,6,8,10,11,16,18,19] },
+      { code:'URU', missing:[3,5,6,7,10,11,14,15,16,18,19] },
+      { code:'FRA', missing:[1,4,5,6,10,12,13,15,16,17,18,19,20] },
+      { code:'SEN', missing:[11,15,18] },
+      { code:'IRQ', missing:[1,4,7,8,9,10,12,13,16,18,20] },
+      { code:'NOR', missing:[1,3,5,7,10,11,13,14,15,16,19] },
+      { code:'ARG', missing:[2,3,4,5,6,7,11,13,14,15,16,19,20] },
+      { code:'ALG', missing:[2,4,5,6,8,9,10,12,15,18,19] },
+      { code:'AUT', missing:[1,3,4,6,8,9,10,11,12,14,15,17,20] },
+      { code:'JOR', missing:[2,5,7,9,11,15,17,19,20] },
+      { code:'POR', missing:[1,3,5,12,13,14,15,17] },
+      { code:'COD', missing:[2,3,4,5,7,10,12,14,17,18,19,20] },
+      { code:'UZB', missing:[2,6,7,9,13,14,16,18,20] },
+      { code:'COL', missing:[3,5,8,9,14,15,19] },
+      { code:'ENG', missing:[2,6,7,12,14,15,16,17,19] },
+      { code:'CRO', missing:[4,5,8,9,10,12,13,15,17,19] },
+      { code:'GHA', missing:[1,8,12,13,14,17,19] },
+      { code:'PAN', missing:[1,5,15,18,19] },
+    ];
+
+    const totalMissing = DATA.reduce((s, n) => s + n.missing.length, 0);
+    const encontradas = 980 - totalMissing;
+    document.getElementById('total-badge').textContent = totalMissing + ' faltantes';
+    document.getElementById('found-badge').textContent = encontradas + ' encontradas';
+    document.getElementById('nations-badge').textContent = DATA.length + ' seleções';
+
+    function renderCards(list) {
+      const grid = document.getElementById('grid');
+      if (list.length === 0) {
+        grid.innerHTML = '<div class="empty">Nenhuma figurinha cadastrada ainda.</div>';
+        return;
+      }
+      grid.innerHTML = list.map(({ code, missing }) => {
+        const flag = FLAGS[code] || '🏳️';
+        const name = NAMES[code] || code;
+        const stickersHtml = missing.map(n =>
+          `<div class="sticker">${n}</div>`
+        ).join('');
+        return `
+          <div class="nation-card">
+            <div class="nation-header">
+              <span class="nation-name">
+                <span class="flag">${flag}</span>${name}
+              </span>
+              <span class="nation-count">${missing.length} falta${missing.length > 1 ? 'm' : ''}</span>
+            </div>
+            <div class="stickers">${stickersHtml}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function filterCards() {
+      const q = document.getElementById('search').value.toLowerCase().trim();
+      if (!q) { renderCards(DATA); return; }
+      const filtered = DATA.filter(({ code }) => {
+        const name = (NAMES[code] || '').toLowerCase();
+        return code.toLowerCase().includes(q) || name.includes(q);
+      });
+      renderCards(filtered);
+    }
+
+    renderCards(DATA);
+  </script>
+</body>
+</html>

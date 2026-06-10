@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Figurinhas Copa 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0f1e;
+      --surface: #111827;
+      --surface2: #1a2236;
+      --border: rgba(255,255,255,0.08);
+      --text: #f0f4ff;
+      --muted: #7a8aaa;
+      --accent-g: #378ADD;
+      --accent-g-soft: rgba(55,138,221,0.12);
+      --accent-e: #D4537E;
+      --accent-e-soft: rgba(212,83,126,0.12);
+      --gold: #EF9F27;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+
+    /* Field lines ambient */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% 100%, rgba(55,138,221,0.07) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 30% at 50% 0%, rgba(212,83,126,0.05) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      max-width: 520px;
+      width: 100%;
+    }
+
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold);
+      background: rgba(239,159,39,0.1);
+      border: 1px solid rgba(239,159,39,0.2);
+      border-radius: 20px;
+      padding: 4px 14px;
+      margin-bottom: 1.25rem;
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 600;
+      text-align: center;
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.02em;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: var(--muted);
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      width: 100%;
+      margin-bottom: 2rem;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.75rem 1.25rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text);
+      cursor: pointer;
+      transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.18s ease;
+    }
+
+    .card-g::before { background: radial-gradient(ellipse at 50% 0%, rgba(55,138,221,0.12), transparent 70%); }
+    .card-e::before { background: radial-gradient(ellipse at 50% 0%, rgba(212,83,126,0.12), transparent 70%); }
+
+    .card:hover {
+      transform: translateY(-3px);
+    }
+    .card-g:hover { border-color: rgba(55,138,221,0.5); }
+    .card-e:hover { border-color: rgba(212,83,126,0.5); }
+    .card:hover::before { opacity: 1; }
+
+    .avatar {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: 600;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .avatar-g {
+      background: var(--accent-g-soft);
+      border: 1.5px solid rgba(55,138,221,0.3);
+      color: #7ec4f5;
+    }
+
+    .avatar-e {
+      background: var(--accent-e-soft);
+      border: 1.5px solid rgba(212,83,126,0.3);
+      color: #f59abc;
+    }
+
+    .card-name {
+      font-size: 18px;
+      font-weight: 600;
+      position: relative;
+      z-index: 1;
+    }
+
+    .card-cta {
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .card-g .card-cta { color: #5aabee; }
+    .card-e .card-cta { color: #e87ca2; }
+
+    .arrow {
+      display: inline-block;
+      transition: transform 0.15s ease;
+    }
+    .card:hover .arrow { transform: translateX(3px); }
+
+    .stats {
+      display: flex;
+      gap: 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      width: 100%;
+    }
+
+    .stat {
+      flex: 1;
+      padding: 0.9rem 0.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .stat + .stat {
+      border-left: 1px solid var(--border);
+    }
+
+    .stat-num {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    @media (max-width: 420px) {
+      h1 { font-size: 1.6rem; }
+      .cards { grid-template-columns: 1fr 1fr; gap: 10px; }
+      .avatar { width: 56px; height: 56px; font-size: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <span class="eyebrow">FIFA World Cup 2026™</span>
+    <h1>Figurinhas da Copa</h1>
+    <p class="subtitle">Escolha a coleção para ver as figurinhas faltantes</p>
+
+    <div class="cards">
+      <a href="gabriel.html" class="card card-g">
+        <div class="avatar avatar-g">G</div>
+        <span class="card-name">Gabriel</span>
+        <span class="card-cta">Ver faltantes <span class="arrow">→</span></span>
+      </a>
+      <a href="emilly.html" class="card card-e">
+        <div class="avatar avatar-e">E</div>
+        <span class="card-name">Emilly</span>
+        <span class="card-cta">Ver faltantes <span class="arrow">→</span></span>
+      </a>
+    </div>
+
+    <div class="stats">
+      <div class="stat">
+        <span class="stat-num">980</span>
+        <span class="stat-label">figurinhas</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">48</span>
+        <span class="stat-label">seleções</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">20</span>
+        <span class="stat-label">por seleção</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
